@@ -77,7 +77,7 @@ class SudokuTestCase(unittest.TestCase):
         assert find_empty_positions(grid4) == (2, 0)
 
 
-def test_find_possible_values(self):
+    def test_find_possible_values(self):
         grid = [['5', '3', ' ', ' ', '7', ' ', ' ', ' ', ' '],
                 ['6', ' ', ' ', '1', '9', '5', ' ', ' ', ' '],
                 [' ', '9', '8', ' ', ' ', ' ', ' ', '6', ' '],
