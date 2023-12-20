@@ -38,7 +38,8 @@ def algorithm(films: FilmsDB, users: list[User], person: User) -> str:
                     normal_films[film] = score_user[0] * user.films.count(film)
     normal_films_list = [[film, normal_films[film]] for film in normal_films]
     return films.get_film(sorted(normal_films_list, key=lambda x: x[1], reverse=True)[0][0])
-
+    
+    
 if __name__ == '__main__':
     with open(PATH_TO_INPUT1, 'r', encoding='utf-8') as file1_input:
         films = {}
