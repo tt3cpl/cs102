@@ -1,5 +1,7 @@
 def encrypt_vigenere(plaintext, keyword):
     """
+    Encrypts plaintext using the Vigenère cipher with the provided keyword.
+
     >>> encrypt_vigenere("PYTHON", "A")
     'PYTHON'
     >>> encrypt_vigenere("python", "a")
@@ -7,26 +9,26 @@ def encrypt_vigenere(plaintext, keyword):
     >>> encrypt_vigenere("ATTACKATDAWN", "LEMON")
     'LXFOPVEFRNHR'
     """
-    ciphertext = ""
-    keyword_repeated = (keyword * ((len(plaintext) // len(keyword)) + 1))[:len(plaintext)]
-    
-    for i in range(len(plaintext)):
-        p = plaintext[i]
-        k = keyword_repeated[i]
+    plaintext = plaintext.upper()
+    keyword = keyword.upper()
+    ciphertext = []
+    keyword_repeated = (keyword * (len(plaintext) // len(keyword) + 1))[:len(plaintext)]
 
-        if 'A' <= p <= 'Z':
-            shift = ord(k.upper()) - ord('A')
-            ciphertext += chr((ord(p) - ord('A') + shift) % 26 + ord('A'))
-        elif 'a' <= p <= 'z':
-            shift = ord(k.lower()) - ord('a')
-            ciphertext += chr((ord(p) - ord('a') + shift) % 26 + ord('a'))
+    for p, k in zip(plaintext, keyword_repeated):
+        if p.isalpha():
+            shift = ord(k) - ord('A')
+            encrypted_char = chr((ord(p) - ord('A') + shift) % 26 + ord('A'))
+            ciphertext.append(encrypted_char)
         else:
-            ciphertext += p 
+            ciphertext.append(p)
 
-    return ciphertext
+    return ''.join(ciphertext)
+
 
 def decrypt_vigenere(ciphertext, keyword):
     """
+    Decrypts ciphertext using the Vigenère cipher with the provided keyword.
+
     >>> decrypt_vigenere("PYTHON", "A")
     'PYTHON'
     >>> decrypt_vigenere("python", "a")
@@ -34,20 +36,18 @@ def decrypt_vigenere(ciphertext, keyword):
     >>> decrypt_vigenere("LXFOPVEFRNHR", "LEMON")
     'ATTACKATDAWN'
     """
-    plaintext = ""
-    keyword_repeated = (keyword * ((len(ciphertext) // len(keyword)) + 1))[:len(ciphertext)]
-    
-    for i in range(len(ciphertext)):
-        c = ciphertext[i]
-        k = keyword_repeated[i]
+    ciphertext = ciphertext.upper()
+    keyword = keyword.upper()
+    plaintext = []
+    keyword_repeated = (keyword * (len(ciphertext) // len(keyword) + 1))[:len(ciphertext)]
 
-        if 'A' <= c <= 'Z': 
-            shift = ord(k.upper()) - ord('A')
-            plaintext += chr((ord(c) - ord('A') - shift + 26) % 26 + ord('A'))
-        elif 'a' <= c <= 'z':  
-            shift = ord(k.lower()) - ord('a')
-            plaintext += chr((ord(c) - ord('a') - shift + 26) % 26 + ord('a'))
+    for c, k in zip(ciphertext, keyword_repeated):
+        if c.isalpha():
+            shift = ord(k) - ord('A')
+            decrypted_char = chr((ord(c) - ord('A') - shift) % 26 + ord('A'))
+            plaintext.append(decrypted_char)
         else:
-            plaintext += c  #
+            plaintext.append(c)
 
-    return plaintext
+    return ''.join(plaintext)
+
