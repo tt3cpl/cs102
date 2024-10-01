@@ -1,21 +1,40 @@
+import random
+import string
 import unittest
-from src.lab2.vigenere123 import encrypt_vigenere, decrypt_vigenere
+import src.lab2.vigenere123
 
-class TestVigenereCipher(unittest.TestCase):
-    
-    def test_encrypt_vigenere(self):
-        self.assertEqual(encrypt_vigenere("PYTHON", "A"), "PYTHON")
-        self.assertEqual(encrypt_vigenere("python", "a"), "python")
-        self.assertEqual(encrypt_vigenere("ATTACKATDAWN", "LEMON"), "LXFOPVEFRNHR")
-        self.assertEqual(encrypt_vigenere("HELLO WORLD!", "KEY"), "RIJVS UYVJN!")
-        self.assertEqual(encrypt_vigenere("12345", "KEY"), "12345")
+class VigenereTestCase(unittest.TestCase):
+    def test_encrypt(self):
+        cases = [
+            ("PYTHON", "A", "PYTHON"),
+            ("python", "a", "python"),
+            ("introduction to python", "lsci", "tfvzzvwkeaqv lq aqvpzf"),
+            ("ATTACKATDAWN", "LEMON", "LXFOPVEFRNHR"),
+        ]
 
-    def test_decrypt_vigenere(self):
-        self.assertEqual(decrypt_vigenere("PYTHON", "A"), "PYTHON")
-        self.assertEqual(decrypt_vigenere("python", "a"), "python")
-        self.assertEqual(decrypt_vigenere("LXFOPVEFRNHR", "LEMON"), "ATTACKATDAWN")
-        self.assertEqual(decrypt_vigenere("RIJVS UYVJN!", "KEY"), "HELLO WORLD!")
-        self.assertEqual(decrypt_vigenere("12345", "KEY"), "12345")
+        for i, (plaintext, keyword, chiphertext) in enumerate(cases):
+            with self.subTest(
+                case=i, plaintext=plaintext, keyword=keyword, chiphertext=chiphertext
+            ):
+                self.assertEqual(chiphertext, src.lab2.vigenere123.encrypt_vigenere(plaintext, keyword))
 
-if __name__ == '__main__':
-    unittest.main()
+    def test_decrypt(self):
+        cases = [
+            ("PYTHON", "A", "PYTHON"),
+            ("python", "a", "python"),
+            ("tfvzzvwkeaqv lq aqvpzf", "lsci", "introduction to python"),
+            ("LXFOPVEFRNHR", "LEMON", "ATTACKATDAWN"),
+        ]
+
+        for i, (chiphertext, keyword, plaintext) in enumerate(cases):
+            with self.subTest(
+                case=i, chiphertext=chiphertext, keyword=keyword, plaintext=plaintext
+            ):
+                self.assertEqual(plaintext, src.lab2.vigenere123.decrypt_vigenere(chiphertext, keyword))
+
+    def test_randomized(self):
+        kwlen = random.randint(4, 24)
+        keyword = ''.join(random.choice(string.ascii_letters) for _ in range(kwlen))
+        plaintext = ''.join(random.choice(string.ascii_letters + ' -,') for _ in range(64))
+        ciphertext = src.lab2.vigenere123.encrypt_vigenere(plaintext, keyword)
+        self.assertEqual(plaintext, src.lab2.vigenere123.decrypt_vigenere(ciphertext, keyword))

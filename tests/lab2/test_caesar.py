@@ -1,21 +1,51 @@
 import unittest
-from src.lab2.caesar123 import encrypt_caesar, decrypt_caesar
+import src.lab2.caesar123 
+import random
+import string
 
-class TestCaesarCipher(unittest.TestCase):
+class CaesarTestCase(unittest.TestCase):
+    def test_encrypt(self):
+        cases = [
+            ("", 0, ""),
+            ("python", 0, "python"),
+            ("PYTHON", 0, "PYTHON"),
+            ("Python", 0, "Python"),
+            ("Python3.6", 0, "Python3.6"),
+            ("", 3, ""),
+            ("PYTHON", 3, "SBWKRQ"),
+            ("python", 3, "sbwkrq"),
+            ("Python", 3, "Sbwkrq"),
+            ("Python3.6", 3, "Sbwkrq3.6"),
+        ]
 
-    def test_encrypt_caesar(self):
-        self.assertEqual(encrypt_caesar("PYTHON"), "SBWKRQ")
-        self.assertEqual(encrypt_caesar("python"), "sbwkrq")
-        self.assertEqual(encrypt_caesar("Python3.6"), "Sbwkrq3.6")
-        self.assertEqual(encrypt_caesar(""), "")
-        self.assertEqual(encrypt_caesar("123!@#"), "123!@#")
+        for i, (plaintext, shift, chiphertext) in enumerate(cases):
+            with self.subTest(case=i, plaintext=plaintext, chiphertext=chiphertext):
+                self.assertEqual(chiphertext, src.lab2.caesar123 .encrypt_caesar(plaintext, shift=shift))
 
-    def test_decrypt_caesar(self):
-        self.assertEqual(decrypt_caesar("SBWKRQ"), "PYTHON")
-        self.assertEqual(decrypt_caesar("sbwkrq"), "python")
-        self.assertEqual(decrypt_caesar("Sbwkrq3.6"), "Python3.6")
-        self.assertEqual(decrypt_caesar(""), "")
-        self.assertEqual(decrypt_caesar("123!@#"), "123!@#")
+    def test_decrypt(self):
+        cases = [
+            ("", 0, ""),
+            ("python", 0, "python"),
+            ("PYTHON", 0, "PYTHON"),
+            ("Python", 0, "Python"),
+            ("Python3.6", 0, "Python3.6"),
+            ("", 3, ""),
+            ("SBWKRQ", 3, "PYTHON"),
+            ("sbwkrq", 3, "python"),
+            ("Sbwkrq", 3, "Python"),
+            ("Sbwkrq3.6", 3, "Python3.6"),
+        ]
 
-if __name__ == '__main__':
-    unittest.main()
+        for i, (chiphertext, shift, plaintext) in enumerate(cases):
+            with self.subTest(case=i, chiphertext=chiphertext, plaintext=plaintext):
+                self.assertEqual(plaintext, src.lab2.caesar123.decrypt_caesar(chiphertext, shift=shift))
+
+    def test_randomized(self):
+        shift = random.randint(8, 24)
+        plaintext = "".join(random.choice(string.ascii_letters + " -,") for _ in range(64))
+        ciphertext = src.lab2.caesar123.encrypt_caesar(plaintext, shift=shift)
+        self.assertEqual(
+            plaintext,
+            src.lab2.caesar123.decrypt_caesar(ciphertext, shift=shift),
+            msg=f"shift={shift}, ciphertext={ciphertext}",
+        )
