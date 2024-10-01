@@ -8,19 +8,19 @@ def encrypt_vigenere(plaintext: str, keyword: str) -> str:
     'LXFOPVEFRNHR'
     """
 
+    keyword = keyword.upper()
     ciphertext = []
-    keyword_length = len(keyword)
-    j = 0
+    keyword_index = 0
 
     for char in plaintext:
         if char.isalpha():
-            shift = ord(keyword[j % keyword_length].upper()) - ord('A')
+            shift = ord(keyword[keyword_index % len(keyword)]) - ord('A')
             if char.isupper():
                 encrypted_char = chr((ord(char) - ord('A') + shift) % 26 + ord('A'))
             else:
                 encrypted_char = chr((ord(char) - ord('a') + shift) % 26 + ord('a'))
             ciphertext.append(encrypted_char)
-            j += 1
+            keyword_index += 1
         else:
             ciphertext.append(char)
 
@@ -36,21 +36,19 @@ def decrypt_vigenere(ciphertext: str, keyword: str) -> str:
     >>> decrypt_vigenere("LXFOPVEFRNHR", "LEMON")
     'ATTACKATDAWN'
     """
-
-
+    keyword = keyword.upper()
     plaintext = []
-    keyword_length = len(keyword)
-    j = 0
+    keyword_index = 0
 
     for char in ciphertext:
         if char.isalpha():
-            shift = ord(keyword[j % keyword_length].upper()) - ord('A')
+            shift = ord(keyword[keyword_index % len(keyword)]) - ord('A')
             if char.isupper():
                 decrypted_char = chr((ord(char) - ord('A') - shift + 26) % 26 + ord('A'))
             else:
                 decrypted_char = chr((ord(char) - ord('a') - shift + 26) % 26 + ord('a'))
             plaintext.append(decrypted_char)
-            j += 1
+            keyword_index += 1
         else:
             plaintext.append(char)
 
