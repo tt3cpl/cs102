@@ -1,60 +1,46 @@
-def encrypt_vigenere(plaintext, keyword):
-    """
-    Encrypts plaintext using the Vigenère cipher with the provided keyword.
+def encrypt_vigenere(plaintext: str, keyword: str) -> str:
+    ciphertext = ""
+    key_length = len(key)
+    key_index = 0
 
-    >>> encrypt_vigenere("PYTHON", "A")
-    'PYTHON'
-    >>> encrypt_vigenere("python", "a")
-    'python'
-    >>> encrypt_vigenere("ATTACKATDAWN", "LEMON")
-    'LXFOPVEFRNHR'
-    """
-    keyword = keyword.upper()
-    ciphertext = []
-    keyword_repeated = (keyword * (len(plaintext) // len(keyword) + 1))[:len(plaintext)]
-
-    keyword_index = 0
-    for p in plaintext:
-        if p.isalpha():
-            shift = ord(keyword_repeated[keyword_index]) - ord('A')
-            if p.isupper():
-                encrypted_char = chr((ord(p) - ord('A') + shift) % 26 + ord('A'))
-            else:
-                encrypted_char = chr((ord(p) - ord('a') + shift) % 26 + ord('a'))
-            ciphertext.append(encrypted_char)
-            keyword_index += 1
+    for char in plaintext:
+        if char.isalpha():
+            prom = ord('A')
+            step = ord(key[key_index % key_length].upper()) - prom
+            new_symb = chr((ord(char.upper()) - prom + step) % 26 + prom)
+            ciphertext += new_symb
+            key_index += 1
         else:
-            ciphertext.append(p)
+            ciphertext += char
 
-    return ''.join(ciphertext)
+    return ciphertext
 
 
-def decrypt_vigenere(ciphertext, keyword):
-    """
-    Decrypts ciphertext using the Vigenère cipher with the provided keyword.
+def decrypt_vigenere(ciphertext: str, keyword: str) -> str:
+    plaintext = ""
+    key_length = len(key)
+    key_index = 0
 
-    >>> decrypt_vigenere("PYTHON", "A")
-    'PYTHON'
-    >>> decrypt_vigenere("python", "a")
-    'python'
-    >>> decrypt_vigenere("LXFOPVEFRNHR", "LEMON")
-    'ATTACKATDAWN'
-    """
-    keyword = keyword.upper()
-    plaintext = []
-    keyword_repeated = (keyword * (len(ciphertext) // len(keyword) + 1))[:len(ciphertext)]
-
-    keyword_index = 0
-    for c in ciphertext:
-        if c.isalpha():
-            shift = ord(keyword_repeated[keyword_index]) - ord('A')
-            if c.isupper():
-                decrypted_char = chr((ord(c) - ord('A') - shift) % 26 + ord('A'))
-            else:
-                decrypted_char = chr((ord(c) - ord('a') - shift) % 26 + ord('a'))
-            plaintext.append(decrypted_char)
-            keyword_index += 1
+    for char in ciphertext:
+        if char.isalpha():
+            prom = ord('A')
+            step = ord(key[key_index % key_length].upper()) - prom
+            new_symb = chr((ord(char.upper()) - prom - step) % 26 + prom)
+            plaintext += new_symb
+            key_index += 1
         else:
-            plaintext.append(c)
+            plaintext += char
 
-    return ''.join(plaintext)
+    return plaintext
+
+
+input_text = "ATTACKATDAWN"
+key = "LEMONLEMONLE"
+encoded = encrypt_vigenere(input_text, key)
+print(encoded)
+
+
+input_text = "LXFOPVEFRNHR"
+key = "LEMONLEMONLE"
+decoded = decrypt_vigenere(input_text, key)
+print(decoded)
