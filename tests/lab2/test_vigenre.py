@@ -1,34 +1,21 @@
 import unittest
-import random
-import string
-import os
-import sys
-parent_dir = os.path.abspath(os.path.join(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")), ".."))
-sys.path.append(parent_dir)
+from src.lab2.rsa123 import encrypt_vigenere, decrypt_vigenere
 
-from src.lab2.vigenere123 import encrypt_vigenere, decrypt_vigenere
+class TestVigenereCipher(unittest.TestCase):
 
-class TestVigenreCipher(unittest.TestCase):
+    def test_encrypt_vigenere(self):
+        self.assertEqual(encrypt_vigenere("PYTHON", "A"), "PYTHON")
+        self.assertEqual(encrypt_vigenere("python", "a"), "python")
+        self.assertEqual(encrypt_vigenere("ATTACKATDAWN", "LEMON"), "LXFOPVEFRNHR")
+        self.assertEqual(encrypt_vigenere("HELLO WORLD", "KEY"), "RIJVS UYVJN")
+        self.assertEqual(encrypt_vigenere("12345!@#", "KEY"), "12345!@#")
 
-    def test_randomized(self):
-        kwlen = random.randint(4, 24)
-        keyword = ''.join(random.choice(string.ascii_letters) for _ in range(kwlen))
-        plaintext = ''.join(random.choice(string.ascii_letters + ' -,') for _ in range(64))
-        ciphertext = encrypt_vigenere(plaintext, keyword)
-        self.assertEqual(plaintext, decrypt_vigenere(ciphertext, keyword))
-
-    # def test_encrypt_vigenre(self):
-    #     self.assertEqual(encrypt_vigenere("VIKTOR", "A"), 'VIKTOR')
-    #     self.assertEqual(encrypt_vigenere("viktor", 'a'), 'viktor')
-    #     self.assertEqual(encrypt_vigenere("VIKTORLIKEBEER", "FISH"), 'AQCATZDPPMTLJZ')
-
-    # def test_decrypt_vigenre(self):
-    #     self.assertEqual(decrypt_vigenere("VIKTOR", 'A'), 'VIKTOR')
-    #     self.assertEqual(decrypt_vigenere("viktor", 'a'), 'viktor')
-    #     self.assertEqual(decrypt_vigenere("AQCATZDPPMTLJZ", "FISH"), 'VIKTORLIKEBEER')
+    def test_decrypt_vigenere(self):
+        self.assertEqual(decrypt_vigenere("PYTHON", "A"), "PYTHON")
+        self.assertEqual(decrypt_vigenere("python", "a"), "python")
+        self.assertEqual(decrypt_vigenere("LXFOPVEFRNHR", "LEMON"), "ATTACKATDAWN")
+        self.assertEqual(decrypt_vigenere("RIJVS UYVJN", "KEY"), "HELLO WORLD")
+        self.assertEqual(decrypt_vigenere("12345!@#", "KEY"), "12345!@#")
 
 if __name__ == '__main__':
     unittest.main()
-
-
-

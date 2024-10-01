@@ -1,25 +1,21 @@
 import unittest
-import os
-import sys
-parent_dir = os.path.abspath(os.path.join(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")), ".."))
-sys.path.append(parent_dir)
-
 from src.lab2.caesar123 import encrypt_caesar, decrypt_caesar
-
 
 class TestCaesarCipher(unittest.TestCase):
 
     def test_encrypt_caesar(self):
-        self.assertEqual(encrypt_caesar("HELLO"), 'KHOOR')
-        self.assertEqual(encrypt_caesar("caesar"), 'fdhvdu')
-        self.assertEqual(encrypt_caesar("Cipher1000-7"), 'Flskhu1000-7')
-        self.assertEqual(encrypt_caesar(""), '')
+        self.assertEqual(encrypt_caesar("PYTHON"), "SBWKRQ")
+        self.assertEqual(encrypt_caesar("python"), "sbwkrq")
+        self.assertEqual(encrypt_caesar("Python3.6"), "Sbwkrq3.6")
+        self.assertEqual(encrypt_caesar(""), "")
+        self.assertEqual(encrypt_caesar("123!@#"), "123!@#")
 
     def test_decrypt_caesar(self):
-        self.assertEqual(decrypt_caesar("KHOOR"), 'HELLO')
-        self.assertEqual(decrypt_caesar("fdhvdu"), 'caesar')
-        self.assertEqual(decrypt_caesar("Flskhu1000-7"), 'Cipher1000-7')
-        self.assertEqual(decrypt_caesar(""), '')
+        self.assertEqual(decrypt_caesar("SBWKRQ"), "PYTHON")
+        self.assertEqual(decrypt_caesar("sbwkrq"), "python")
+        self.assertEqual(decrypt_caesar("Sbwkrq3.6"), "Python3.6")
+        self.assertEqual(decrypt_caesar(""), "")
+        self.assertEqual(decrypt_caesar("123!@#"), "123!@#")
 
 if __name__ == '__main__':
     unittest.main()

@@ -1,50 +1,54 @@
-def encrypt_vigenere(plaintext: str, keyword: str) -> str:
+def encrypt_vigenere(plaintext, keyword):
+    """
+    >>> encrypt_vigenere("PYTHON", "A")
+    'PYTHON'
+    >>> encrypt_vigenere("python", "a")
+    'python'
+    >>> encrypt_vigenere("ATTACKATDAWN", "LEMON")
+    'LXFOPVEFRNHR'
+    """
     ciphertext = ""
-    key_length = len(keyword)
-    key_index = 0
+    keyword_repeated = (keyword * ((len(plaintext) // len(keyword)) + 1))[:len(plaintext)]
+    
+    for i in range(len(plaintext)):
+        p = plaintext[i]
+        k = keyword_repeated[i]
 
-    for char in plaintext:
-        if char.isalpha():
-            if char.isupper():
-                prom = ord('A')
-            else:
-                prom = ord('a')
-            step = ord(keyword[key_index % key_length].upper()) - ord('A')
-            new_symb = chr((ord(char) - prom + step) % 26 + prom)
-            ciphertext += new_symb
-            key_index += 1
+        if 'A' <= p <= 'Z':
+            shift = ord(k.upper()) - ord('A')
+            ciphertext += chr((ord(p) - ord('A') + shift) % 26 + ord('A'))
+        elif 'a' <= p <= 'z':
+            shift = ord(k.lower()) - ord('a')
+            ciphertext += chr((ord(p) - ord('a') + shift) % 26 + ord('a'))
         else:
-            ciphertext += char
+            ciphertext += p
 
     return ciphertext
 
 
-def decrypt_vigenere(ciphertext: str, keyword: str) -> str:
+def decrypt_vigenere(ciphertext, keyword):
+    """
+    >>> decrypt_vigenere("PYTHON", "A")
+    'PYTHON'
+    >>> decrypt_vigenere("python", "a")
+    'python'
+    >>> decrypt_vigenere("LXFOPVEFRNHR", "LEMON")
+    'ATTACKATDAWN'
+    """
     plaintext = ""
-    key_length = len(keyword)
-    key_index = 0
+    keyword_repeated = (keyword * ((len(ciphertext) // len(keyword)) + 1))[:len(ciphertext)]
+    
+    for i in range(len(ciphertext)):
+        c = ciphertext[i]
+        k = keyword_repeated[i]
 
-    for char in ciphertext:
-        if char.isalpha():
-            if char.isupper():
-                prom = ord('A')
-            else:
-                prom = ord('a')
-            step = ord(keyword[key_index % key_length].upper()) - ord('A')
-            new_symb = chr((ord(char) - prom - step) % 26 + prom)
-            plaintext += new_symb
-            key_index += 1
+        if 'A' <= c <= 'Z': 
+            shift = ord(k.upper()) - ord('A')
+            plaintext += chr((ord(c) - ord('A') - shift + 26) % 26 + ord('A'))
+        elif 'a' <= c <= 'z':  
+            shift = ord(k.lower()) - ord('a')
+            plaintext += chr((ord(c) - ord('a') - shift + 26) % 26 + ord('a'))
         else:
-            plaintext += char
+            plaintext += c 
 
     return plaintext
-
-
-
-input_text = "ATTACKATDAWN"
-key = "LEMONLEMONLE"
-encoded = encrypt_vigenere(input_text, key)
-print(encoded)
-
-decoded = decrypt_vigenere(encoded, key)
-print(decoded) 
