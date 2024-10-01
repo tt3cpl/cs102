@@ -4,7 +4,7 @@ import sys
 parent_dir = os.path.abspath(os.path.join(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")), ".."))
 sys.path.append(parent_dir)
 
-from src.lab2.rsa import is_prime, gcd, multiplicative_inverse, encrypt, decrypt
+from src.lab2.rsa123 import is_prime, gcd, multiplicative_inverse, encrypt, decrypt
 
 
 class TestRsaCipher(unittest.TestCase):

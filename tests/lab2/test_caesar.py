@@ -4,7 +4,7 @@ import sys
 parent_dir = os.path.abspath(os.path.join(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")), ".."))
 sys.path.append(parent_dir)
 
-from src.lab2.caesar import encrypt_caesar, decrypt_caesar
+from src.lab2.caesar123 import encrypt_caesar, decrypt_caesar
 
 
 class TestCaesarCipher(unittest.TestCase):

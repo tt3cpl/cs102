@@ -6,7 +6,7 @@ import sys
 parent_dir = os.path.abspath(os.path.join(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")), ".."))
 sys.path.append(parent_dir)
 
-from src.lab2.vigenre import encrypt_vigenere, decrypt_vigenere
+from src.lab2.vigenere123 import encrypt_vigenere, decrypt_vigenere
 
 class TestVigenreCipher(unittest.TestCase):
 
