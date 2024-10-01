@@ -1,4 +1,4 @@
-def encrypt_vigenere(plain_text, key)
+def encrypt_vigenere(plain_text, key):
     """
     >>> encrypt_vigenere("PYTHON", "A")
     'PYTHON'
