@@ -1,4 +1,4 @@
-def encrypt_vigenere(plaintext: str, keyword: str) -> str:
+def encrypt_vigenere(plain_text, key)
     """
     >>> encrypt_vigenere("PYTHON", "A")
     'PYTHON'
@@ -8,26 +8,27 @@ def encrypt_vigenere(plaintext: str, keyword: str) -> str:
     'LXFOPVEFRNHR'
     """
 
-    keyword = keyword.upper()
-    ciphertext = []
-    keyword_index = 0
-
-    for char in plaintext:
-        if char.isalpha():
-            shift = ord(keyword[keyword_index % len(keyword)]) - ord('A')
-            if char.isupper():
-                encrypted_char = chr((ord(char) - ord('A') + shift) % 26 + ord('A'))
+    encrypted_text = ''
+    key_repeated = (key * (len(plain_text) // len(key))) + key[:len(plain_text) % len(key)]
+   # Iterate through each character in the plaintext.
+    for i in range(len(plain_text)):
+       # Check if the character is an alphabet letter.
+        if plain_text[i].isalpha():
+           # Calculate the shift based on the corresponding key letter.
+            shift = ord(key_repeated[i].upper()) - ord('A')
+           # Encrypt uppercase and lowercase letters separately.
+            if plain_text[i].isupper():
+               encrypted_text += chr((ord(plain_text[i]) + shift - ord('A')) % 26 + ord('A'))
             else:
-                encrypted_char = chr((ord(char) - ord('a') + shift) % 26 + ord('a'))
-            ciphertext.append(encrypted_char)
-            keyword_index += 1
+               encrypted_text += chr((ord(plain_text[i]) + shift - ord('a')) % 26 + ord('a'))
         else:
-            ciphertext.append(char)
+           # If the character is not an alphabet letter, keep it unchanged.
+           encrypted_text += plain_text[i]
+   # Return the final encrypted text
+    return encrypted_text
 
-    return ''.join(ciphertext)
 
-
-def decrypt_vigenere(ciphertext: str, keyword: str) -> str:
+def decrypt_vigenere(cipher_text, key):
     """
     >>> decrypt_vigenere("PYTHON", "A")
     'PYTHON'
@@ -36,20 +37,22 @@ def decrypt_vigenere(ciphertext: str, keyword: str) -> str:
     >>> decrypt_vigenere("LXFOPVEFRNHR", "LEMON")
     'ATTACKATDAWN'
     """
-    keyword = keyword.upper()
-    plaintext = []
-    keyword_index = 0
-
-    for char in ciphertext:
-        if char.isalpha():
-            shift = ord(keyword[keyword_index % len(keyword)]) - ord('A')
-            if char.isupper():
-                decrypted_char = chr((ord(char) - ord('A') - shift + 26) % 26 + ord('A'))
+    decrypted_text = ''
+    # Repeat the key to match the length of the ciphertext
+    key_repeated = (key * (len(cipher_text) // len(key))) + key[:len(cipher_text) % len(key)]
+    # Iterate through each character in the ciphertext
+    for i in range(len(cipher_text)):
+        # Check if the character is an alphabet letter
+        if cipher_text[i].isalpha():
+            # Calculate the shift based on the corresponding key letter
+            shift = ord(key_repeated[i].upper()) - ord('A')
+            # Decrypt uppercase and lowercase letters separately
+            if cipher_text[i].isupper():
+                decrypted_text += chr((ord(cipher_text[i]) - shift - ord('A')) % 26 + ord('A'))
             else:
-                decrypted_char = chr((ord(char) - ord('a') - shift + 26) % 26 + ord('a'))
-            plaintext.append(decrypted_char)
-            keyword_index += 1
+                decrypted_text += chr((ord(cipher_text[i]) - shift - ord('a')) % 26 + ord('a'))
         else:
-            plaintext.append(char)
-
-    return ''.join(plaintext)
+            # If the character is not an alphabet letter, keep it unchanged
+            decrypted_text += cipher_text[i]
+    # Return the final decrypted text
+    return decrypted_text
