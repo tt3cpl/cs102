@@ -1,7 +1,4 @@
-from operator import lshift
-
-
-def encrypt_caesar(plaintext):
+def encrypt_caesar(plaintext, shift: int = 3):
     """
     >>> encrypt_caesar("PYTHON")
     'SBWKRQ'
@@ -15,7 +12,7 @@ def encrypt_caesar(plaintext):
     ciphertext = ""
     for char in plaintext:
         if char.isalpha():  
-            shift_amount = lshift % 26  
+            shift_amount = shift % 26  
             """
             Проверяем, является ли символ буквой и гарантируем, что сдвиг находится в пределах алфавита
             """
@@ -30,7 +27,7 @@ def encrypt_caesar(plaintext):
 
 
 
-def decrypt_caesar(ciphertext):
+def decrypt_caesar(ciphertext, shift: int = 3):
     """
     >>> decrypt_caesar("SBWKRQ")
     'PYTHON'
@@ -44,7 +41,7 @@ def decrypt_caesar(ciphertext):
     plaintext = ""
     for char in ciphertext:
         if char.isalpha():  
-            shift_amount = lshift % 26  
+            shift_amount = shift % 26  
             """
             Проверяем, является ли символ буквой и гарантируем, что сдвиг находится в пределах алфавита
             """
