@@ -1,46 +1,57 @@
 def encrypt_vigenere(plaintext: str, keyword: str) -> str:
-    ciphertext = ""
-    key_length = len(key)
-    key_index = 0
+    """
+    >>> encrypt_vigenere("PYTHON", "A")
+    'PYTHON'
+    >>> encrypt_vigenere("python", "a")
+    'python'
+    >>> encrypt_vigenere("ATTACKATDAWN", "LEMON")
+    'LXFOPVEFRNHR'
+    """
+
+    ciphertext = []
+    keyword_length = len(keyword)
+    j = 0
 
     for char in plaintext:
         if char.isalpha():
-            prom = ord('A')
-            step = ord(key[key_index % key_length].upper()) - prom
-            new_symb = chr((ord(char.upper()) - prom + step) % 26 + prom)
-            ciphertext += new_symb
-            key_index += 1
+            shift = (ord(keyword[j % keyword_length].upper()) - ord('A'))
+            if char.isupper():
+                encrypted_char = chr((ord(char) - ord('A') + shift) % 26 + ord('A'))
+            else:
+                encrypted_char = chr((ord(char) - ord('a') + shift) % 26 + ord('a'))
+            ciphertext.append(encrypted_char)
+            j += 1
         else:
-            ciphertext += char
+            ciphertext.append(char)
 
-    return ciphertext
+    return ''.join(ciphertext)
 
 
 def decrypt_vigenere(ciphertext: str, keyword: str) -> str:
-    plaintext = ""
-    key_length = len(key)
-    key_index = 0
+    """
+    >>> decrypt_vigenere("PYTHON", "A")
+    'PYTHON'
+    >>> decrypt_vigenere("python", "a")
+    'python'
+    >>> decrypt_vigenere("LXFOPVEFRNHR", "LEMON")
+    'ATTACKATDAWN'
+    """
+
+
+    plaintext = []
+    keyword_length = len(keyword)
+    j = 0
 
     for char in ciphertext:
         if char.isalpha():
-            prom = ord('A')
-            step = ord(key[key_index % key_length].upper()) - prom
-            new_symb = chr((ord(char.upper()) - prom - step) % 26 + prom)
-            plaintext += new_symb
-            key_index += 1
+            shift = (ord(keyword[j % keyword_length].upper()) - ord('A'))
+            if char.isupper():
+                decrypted_char = chr((ord(char) - ord('A') - shift + 26) % 26 + ord('A'))
+            else:
+                decrypted_char = chr((ord(char) - ord('a') - shift + 26) % 26 + ord('a'))
+            plaintext.append(decrypted_char)
+            j += 1
         else:
-            plaintext += char
+            plaintext.append(char)
 
-    return plaintext
-
-
-input_text = "ATTACKATDAWN"
-key = "LEMONLEMONLE"
-encoded = encrypt_vigenere(input_text, key)
-print(encoded)
-
-
-input_text = "LXFOPVEFRNHR"
-key = "LEMONLEMONLE"
-decoded = decrypt_vigenere(input_text, key)
-print(decoded)
+    return ''.join(plaintext)
