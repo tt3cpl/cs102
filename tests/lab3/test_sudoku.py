@@ -1,57 +1,60 @@
 import unittest
 
+import os
+import sys
+parent_dir = os.path.abspath(os.path.join(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")), ".."))
+sys.path.append(parent_dir)
 
-import sudoku
-
+import src.lab3.sudoku
 
 class SudokuTestCase(unittest.TestCase):
     def test_group(self):
         values = [1, 2, 3, 4]
         expected_groups = [[1, 2], [3, 4]]
-        actual_groups = sudoku.group(values, 2)
+        actual_groups = src.lab3.sudoku.group(values, 2)
         self.assertEqual(expected_groups, actual_groups)
 
         values = [1, 2, 3, 4, 5, 6, 7, 8, 9]
         expected_groups = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
-        actual_groups = sudoku.group(values, 3)
+        actual_groups = src.lab3.sudoku.group(values, 3)
         self.assertEqual(expected_groups, actual_groups)
 
     def test_get_row(self):
         puzzle = [["1", "2", "."], ["4", "5", "6"], ["7", "8", "9"]]
         pos = (0, 0)
         expected_row = ["1", "2", "."]
-        actual_row = sudoku.get_row(puzzle, pos)
+        actual_row = src.lab3.sudoku.get_row(puzzle, pos)
         self.assertEqual(expected_row, actual_row)
 
         puzzle = [["1", "2", "3"], ["4", ".", "6"], ["7", "8", "9"]]
         pos = (1, 0)
         expected_row = ["4", ".", "6"]
-        actual_row = sudoku.get_row(puzzle, pos)
+        actual_row = src.lab3.sudoku.get_row(puzzle, pos)
         self.assertEqual(expected_row, actual_row)
 
         puzzle = [["1", "2", "3"], ["4", "5", "6"], [".", "8", "9"]]
         pos = (2, 0)
         expected_row = [".", "8", "9"]
-        actual_row = sudoku.get_row(puzzle, pos)
+        actual_row = src.lab3.sudoku.get_row(puzzle, pos)
         self.assertEqual(expected_row, actual_row)
 
     def test_get_col(self):
         puzzle = [["1", "2", "."], ["4", "5", "6"], ["7", "8", "9"]]
         pos = (0, 0)
         expected_col = ["1", "4", "7"]
-        actual_col = sudoku.get_col(puzzle, pos)
+        actual_col = src.lab3.sudoku.get_col(puzzle, pos)
         self.assertEqual(expected_col, actual_col)
 
         puzzle = [["1", "2", "3"], ["4", ".", "6"], ["7", "8", "9"]]
         pos = (0, 1)
         expected_col = ["2", ".", "8"]
-        actual_col = sudoku.get_col(puzzle, pos)
+        actual_col = src.lab3.sudoku.get_col(puzzle, pos)
         self.assertEqual(expected_col, actual_col)
 
         puzzle = [["1", "2", "3"], ["4", "5", "6"], [".", "8", "9"]]
         pos = (0, 2)
         expected_col = ["3", "6", "9"]
-        actual_col = sudoku.get_col(puzzle, pos)
+        actual_col = src.lab3.sudoku.get_col(puzzle, pos)
         self.assertEqual(expected_col, actual_col)
 
     def test_get_block(self):
@@ -69,33 +72,33 @@ class SudokuTestCase(unittest.TestCase):
 
         pos = (0, 1)
         expected_block = ["5", "3", ".", "6", ".", ".", ".", "9", "8"]
-        actual_block = sudoku.get_block(grid, pos)
+        actual_block = src.lab3.sudoku.get_block(grid, pos)
         self.assertEqual(expected_block, actual_block)
 
         pos = (4, 7)
         expected_block = [".", ".", "3", ".", ".", "1", ".", ".", "6"]
-        actual_block = sudoku.get_block(grid, pos)
+        actual_block = src.lab3.sudoku.get_block(grid, pos)
         self.assertEqual(expected_block, actual_block)
 
         pos = (8, 8)
         expected_block = ["2", "8", ".", ".", ".", "5", ".", "7", "9"]
-        actual_block = sudoku.get_block(grid, pos)
+        actual_block = src.lab3.sudoku.get_block(grid, pos)
         self.assertEqual(expected_block, actual_block)
 
     def test_find_empty_positions(self):
         grid = [["1", "2", "."], ["4", "5", "6"], ["7", "8", "9"]]
         expected_pos = (0, 2)
-        actual_pos = sudoku.find_empty_positions(grid)
+        actual_pos = src.lab3.sudoku.find_empty_positions(grid)
         self.assertEqual(expected_pos, actual_pos)
 
         grid = [["1", "2", "3"], ["4", ".", "6"], ["7", "8", "9"]]
         expected_pos = (1, 1)
-        actual_pos = sudoku.find_empty_positions(grid)
+        actual_pos = src.lab3.sudoku.find_empty_positions(grid)
         self.assertEqual(expected_pos, actual_pos)
 
         grid = [["1", "2", "3"], ["4", "5", "6"], [".", "8", "9"]]
         expected_pos = (2, 0)
-        actual_pos = sudoku.find_empty_positions(grid)
+        actual_pos = src.lab3.sudoku.find_empty_positions(grid)
         self.assertEqual(expected_pos, actual_pos)
 
     def test_find_possible_values(self):
@@ -112,12 +115,12 @@ class SudokuTestCase(unittest.TestCase):
         ]
         pos = (0, 2)
         expected_values = {"1", "2", "4"}
-        actual_values = sudoku.find_possible_values(grid, pos)
+        actual_values = src.lab3.sudoku.find_possible_values(grid, pos)
         self.assertEqual(expected_values, actual_values)
 
         pos = (4, 7)
         expected_values = {"2", "5", "9"}
-        actual_values = sudoku.find_possible_values(grid, pos)
+        actual_values = src.lab3.sudoku.find_possible_values(grid, pos)
         self.assertEqual(expected_values, actual_values)
 
     def test_solve(self):
@@ -143,7 +146,7 @@ class SudokuTestCase(unittest.TestCase):
             ["2", "8", "7", "4", "1", "9", "6", "3", "5"],
             ["3", "4", "5", "2", "8", "6", "1", "7", "9"],
         ]
-        actual_solution = sudoku.solve(grid)
+        actual_solution = src.lab3.sudoku.solve(grid)
         self.assertEqual(expected_solution, actual_solution)
 
         grid = [
@@ -168,7 +171,7 @@ class SudokuTestCase(unittest.TestCase):
             ["8", "1", "5", "4", "7", "9", "2", "6", "3"],
             ["7", "2", "3", "6", "5", "1", "9", "8", "4"],
         ]
-        actual_solution = sudoku.solve(grid)
+        actual_solution = src.lab3.sudoku.solve(grid)
         self.assertEqual(expected_solution, actual_solution)
     def test_check_solution(self):
         good_solution = [
@@ -182,7 +185,7 @@ class SudokuTestCase(unittest.TestCase):
             ["2", "8", "7", "4", "1", "9", "6", "3", "5"],
             ["3", "4", "5", "2", "8", "6", "1", "7", "9"],
         ]
-        self.assertTrue(sudoku.check_solution(good_solution))
+        self.assertTrue(src.lab3.sudoku.check_solution(good_solution))
 
         not_solved = [
             ["5", "3", "4", "6", "7", "8", "9", "1", "2"],
@@ -195,7 +198,7 @@ class SudokuTestCase(unittest.TestCase):
             ["2", "8", "7", "4", "1", "9", "6", "3", "5"],
             ["3", "4", "5", "2", "8", "6", "1", "7", "."],
         ]
-        self.assertFalse(sudoku.check_solution(not_solved))
+        self.assertFalse(src.lab3.sudoku.check_solution(not_solved))
 
         bad_solution = [
             ["6", "6", "1", "1", "1", "5", "8", "3", "7"],
@@ -208,35 +211,35 @@ class SudokuTestCase(unittest.TestCase):
             ["8", "1", "5", "4", "7", "9", "2", "6", "3"],
             ["7", "2", "3", "6", "5", "1", "9", "8", "4"],
         ]
-        self.assertFalse(sudoku.check_solution(bad_solution))
+        self.assertFalse(src.lab3.sudoku.check_solution(bad_solution))
 
         bad_solution = [[str(v) for v in range(1, 10)]] * 9
-        self.assertFalse(sudoku.check_solution(bad_solution))
+        self.assertFalse(src.lab3.sudoku.check_solution(bad_solution))
 
         bad_solution = [[str(v)] * 9 for v in range(1, 10)]
-        self.assertFalse(sudoku.check_solution(bad_solution))
+        self.assertFalse(src.lab3.sudoku.check_solution(bad_solution))
 
     def test_generate_sudoku(self):
-        grid = sudoku.generate_sudoku(40)
+        grid = src.lab3.sudoku.generate_sudoku(40)
         expected_unknown = 41
         actual_unknown = sum(1 for row in grid for e in row if e == ".")
         self.assertEqual(expected_unknown, actual_unknown)
-        solution = sudoku.solve(grid)
-        solved = sudoku.check_solution(solution)
+        solution = src.lab3.sudoku.solve(grid)
+        solved = src.lab3.sudoku.check_solution(solution)
         self.assertTrue(solved)
 
-        grid = sudoku.generate_sudoku(1000)
+        grid = src.lab3.sudoku.generate_sudoku(1000)
         expected_unknown = 0
         actual_unknown = sum(1 for row in grid for e in row if e == ".")
         self.assertEqual(expected_unknown, actual_unknown)
-        solution = sudoku.solve(grid)
-        solved = sudoku.check_solution(solution)
+        solution = src.lab3.sudoku.solve(grid)
+        solved = src.lab3.sudoku.check_solution(solution)
         self.assertTrue(solved)
 
-        grid = sudoku.generate_sudoku(0)
+        grid = src.lab3.sudoku.generate_sudoku(0)
         expected_unknown = 81
         actual_unknown = sum(1 for row in grid for e in row if e == ".")
         self.assertEqual(expected_unknown, actual_unknown)
-        solution = sudoku.solve(grid)
-        solved = sudoku.check_solution(solution)
+        solution = src.lab3.sudoku.solve(grid)
+        solved = src.lab3.sudoku.check_solution(solution)
         self.assertTrue(solved)
