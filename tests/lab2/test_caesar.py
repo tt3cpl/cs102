@@ -1,25 +1,51 @@
 import unittest
-import os
-import sys
-parent_dir = os.path.abspath(os.path.join(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")), ".."))
-sys.path.append(parent_dir)
+import src.lab2.caesar123 
+import random
+import string
 
-from src.lab2.caesar import encrypt_caesar, decrypt_caesar
+class CaesarTestCase(unittest.TestCase):
+    def test_encrypt(self):
+        cases = [
+            ("", 0, ""),
+            ("python", 0, "python"),
+            ("PYTHON", 0, "PYTHON"),
+            ("Python", 0, "Python"),
+            ("Python3.6", 0, "Python3.6"),
+            ("", 3, ""),
+            ("PYTHON", 3, "SBWKRQ"),
+            ("python", 3, "sbwkrq"),
+            ("Python", 3, "Sbwkrq"),
+            ("Python3.6", 3, "Sbwkrq3.6"),
+        ]
 
+        for i, (plaintext, shift, chiphertext) in enumerate(cases):
+            with self.subTest(case=i, plaintext=plaintext, chiphertext=chiphertext):
+                self.assertEqual(chiphertext, src.lab2.caesar123 .encrypt_caesar(plaintext, shift=shift))
 
-class TestCaesarCipher(unittest.TestCase):
+    def test_decrypt(self):
+        cases = [
+            ("", 0, ""),
+            ("python", 0, "python"),
+            ("PYTHON", 0, "PYTHON"),
+            ("Python", 0, "Python"),
+            ("Python3.6", 0, "Python3.6"),
+            ("", 3, ""),
+            ("SBWKRQ", 3, "PYTHON"),
+            ("sbwkrq", 3, "python"),
+            ("Sbwkrq", 3, "Python"),
+            ("Sbwkrq3.6", 3, "Python3.6"),
+        ]
 
-    def test_encrypt_caesar(self):
-        self.assertEqual(encrypt_caesar("HELLO"), 'KHOOR')
-        self.assertEqual(encrypt_caesar("caesar"), 'fdhvdu')
-        self.assertEqual(encrypt_caesar("Cipher1000-7"), 'Flskhu1000-7')
-        self.assertEqual(encrypt_caesar(""), '')
+        for i, (chiphertext, shift, plaintext) in enumerate(cases):
+            with self.subTest(case=i, chiphertext=chiphertext, plaintext=plaintext):
+                self.assertEqual(plaintext, src.lab2.caesar123.decrypt_caesar(chiphertext, shift=shift))
 
-    def test_decrypt_caesar(self):
-        self.assertEqual(decrypt_caesar("KHOOR"), 'HELLO')
-        self.assertEqual(decrypt_caesar("fdhvdu"), 'caesar')
-        self.assertEqual(decrypt_caesar("Flskhu1000-7"), 'Cipher1000-7')
-        self.assertEqual(decrypt_caesar(""), '')
-
-if __name__ == '__main__':
-    unittest.main()
+    def test_randomized(self):
+        shift = random.randint(8, 24)
+        plaintext = "".join(random.choice(string.ascii_letters + " -,") for _ in range(64))
+        ciphertext = src.lab2.caesar123.encrypt_caesar(plaintext, shift=shift)
+        self.assertEqual(
+            plaintext,
+            src.lab2.caesar123.decrypt_caesar(ciphertext, shift=shift),
+            msg=f"shift={shift}, ciphertext={ciphertext}",
+        )

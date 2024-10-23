@@ -1,34 +1,40 @@
-import unittest
 import random
 import string
-import os
-import sys
-parent_dir = os.path.abspath(os.path.join(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")), ".."))
-sys.path.append(parent_dir)
+import unittest
+import src.lab2.vigenere123
 
-from src.lab2.vigenre import encrypt_vigenere, decrypt_vigenere
+class VigenereTestCase(unittest.TestCase):
+    def test_encrypt(self):
+        cases = [
+            ("PYTHON", "A", "PYTHON"),
+            ("python", "a", "python"),
+            ("introduction to python", "lsci", "tfvzzvwkeaqv lq aqvpzf"),
+            ("ATTACKATDAWN", "LEMON", "LXFOPVEFRNHR"),
+        ]
 
-class TestVigenreCipher(unittest.TestCase):
+        for i, (plaintext, keyword, chiphertext) in enumerate(cases):
+            with self.subTest(
+                case=i, plaintext=plaintext, keyword=keyword, chiphertext=chiphertext
+            ):
+                self.assertEqual(chiphertext, src.lab2.vigenere123.encrypt_vigenere(plaintext, keyword))
+
+    def test_decrypt(self):
+        cases = [
+            ("PYTHON", "A", "PYTHON"),
+            ("python", "a", "python"),
+            ("tfvzzvwkeaqv lq aqvpzf", "lsci", "introduction to python"),
+            ("LXFOPVEFRNHR", "LEMON", "ATTACKATDAWN"),
+        ]
+
+        for i, (chiphertext, keyword, plaintext) in enumerate(cases):
+            with self.subTest(
+                case=i, chiphertext=chiphertext, keyword=keyword, plaintext=plaintext
+            ):
+                self.assertEqual(plaintext, src.lab2.vigenere123.decrypt_vigenere(chiphertext, keyword))
 
     def test_randomized(self):
         kwlen = random.randint(4, 24)
         keyword = ''.join(random.choice(string.ascii_letters) for _ in range(kwlen))
         plaintext = ''.join(random.choice(string.ascii_letters + ' -,') for _ in range(64))
-        ciphertext = encrypt_vigenere(plaintext, keyword)
-        self.assertEqual(plaintext, decrypt_vigenere(ciphertext, keyword))
-
-    # def test_encrypt_vigenre(self):
-    #     self.assertEqual(encrypt_vigenere("VIKTOR", "A"), 'VIKTOR')
-    #     self.assertEqual(encrypt_vigenere("viktor", 'a'), 'viktor')
-    #     self.assertEqual(encrypt_vigenere("VIKTORLIKEBEER", "FISH"), 'AQCATZDPPMTLJZ')
-
-    # def test_decrypt_vigenre(self):
-    #     self.assertEqual(decrypt_vigenere("VIKTOR", 'A'), 'VIKTOR')
-    #     self.assertEqual(decrypt_vigenere("viktor", 'a'), 'viktor')
-    #     self.assertEqual(decrypt_vigenere("AQCATZDPPMTLJZ", "FISH"), 'VIKTORLIKEBEER')
-
-if __name__ == '__main__':
-    unittest.main()
-
-
-
+        ciphertext = src.lab2.vigenere123.encrypt_vigenere(plaintext, keyword)
+        self.assertEqual(plaintext, src.lab2.vigenere123.decrypt_vigenere(ciphertext, keyword))
